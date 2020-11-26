@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import static bot.commands.CommandMap.prepareCommands;
-
 public class ToshinoKyoko {
     public static JDA jda;
 
@@ -24,9 +22,6 @@ public class ToshinoKyoko {
 
         jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).build().awaitReady();
         jda.addEventListener(new CommandHandler());
-
-        jda.getGuildById(707295470661140562L).getDefaultChannel().sendMessage("Hellu").queue();
-        prepareCommands();
     }
 
     public static JDA getJda() {

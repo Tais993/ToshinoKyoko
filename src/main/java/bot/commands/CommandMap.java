@@ -1,30 +1,44 @@
 package bot.commands;
 
-import bot.commands.general.Ping;
+import bot.commands.anime.Hug;
+import bot.commands.anime.Pat;
+import bot.commands.anime.Wink;
+import bot.commands.general.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static bot.utils.Utils.getBotAsUser;
 import static bot.utils.Utils.getCurrentColor;
+import static java.util.Map.entry;
 
 public class CommandMap {
-    static HashMap<String, ICommand> commands = new HashMap<>();
+    static HashMap<String, ICommand> commands = new HashMap<>(Map.ofEntries(
+            entry("ping", new Ping()),
+            entry("help", new Help()),
+            entry("pong", new Pong()),
+            entry("about", new About()),
+            entry("userinfo", new Userinfo()),
+            entry("whois", new Userinfo()),
+            entry("serverstats", new Serverstats()),
+            entry("roles", new Roles()),
+            entry("role", new Roles()),
+            entry("regions", new Regions()),
+            entry("region", new Regions()),
+            entry("hug", new Hug()),
+            entry("pat", new Pat()),
+            entry("wink", new Wink())
+    ));
 
-    static ArrayList<String> categories = new ArrayList<>(List.of("general", "anime"));
-
-    public static void prepareCommands() {
-        commands.put("ping", new Ping());
-        commands.put("help", new Help());
-    }
+    static ArrayList<String> categories = new ArrayList<>(List.of("General", "Anime", "Miscellaneous", "Music", "Staff"));
 
     public static boolean runCommand(CommandReceivedEvent e) {
-        ICommand command = commands.get(e.getCommand());
+        ICommand command = commands.get(e.getCommand().toLowerCase());
         if (command != null) {
             command.command(e);
             return true;
@@ -41,33 +55,38 @@ public class CommandMap {
         return commands.containsKey(commandName);
     }
 
+
     public static void getHelpAllByCategory(CommandReceivedEvent e) {
         PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
 
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(getCurrentColor());
+        eb.setTitle("Kyoko's Command Handbook");
+
+        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
         categories.forEach(category -> {
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(getCurrentColor());
-            eb.setTitle("Help " + category);
-
-            eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
-            eb.setTimestamp(Instant.now());
-
+            StringBuilder commandsOfCategory = new StringBuilder();
             commands.forEach((commandName, command) -> {
-                if (command.getCategory().equalsIgnoreCase(category)) {
-                    if (eb.length() > 1950) {
-                        privateChannel.sendMessage(eb.build()).queue();
-                        eb.setDescription("");
-                    }
-                    eb.appendDescription("**" + commandName + "** - " + command.getShortCommandDescription() + "\n");
+                if (category.equalsIgnoreCase("Miscellaneous") && commandsOfCategory.isEmpty()) {
+                    commandsOfCategory.append("uwu\ngood morning\ngoodnight\nRum Raisin\nBeatmap please\nVideos' Profile\nPoggers");
+                } else if (command.getCategory().equalsIgnoreCase(category)) {
+                    commandsOfCategory.append(commandName).append(" - ").append(command.getShortCommandDescription()).append("\n");
                 }
             });
 
-            privateChannel.sendMessage(eb.build()).queue();
+            eb.addField(category, commandsOfCategory.toString(), false);
+//            if (eb.getFields().size() >= 2) {
+//                privateChannel.sendMessage(eb.build()).queue();
+//                eb.clearFields();
+//            }
         });
+
+        privateChannel.sendMessage(eb.build()).queue();
     }
 
-
-        public static EmbedBuilder getFullHelpCommand(String commandName) {
+    public static EmbedBuilder getFullHelpCommand(String commandName) {
         ICommand command = commands.get(commandName);
 
         EmbedBuilder eb = new EmbedBuilder();
@@ -78,21 +97,6 @@ public class CommandMap {
         eb.setTitle("Help " + commandName);
 
         eb.addField("`." + command.getCommandExample() + "`",  command.getFullCommandDescription(), true);
-
-        eb.setColor(getCurrentColor());
-        return eb;
-    }
-
-    public static EmbedBuilder getErrorHelpCommand(String commandName) {
-        ICommand command = commands.get(commandName);
-
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
-        eb.setTimestamp(Instant.now());
-
-        eb.setTitle("Error " + commandName);
-        eb.addField("`." + command.getCommandExample() + "`",  command.getShortCommandDescription(), true);
 
         eb.setColor(getCurrentColor());
         return eb;
@@ -117,5 +121,20 @@ public class CommandMap {
         });
 
         e.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static EmbedBuilder getErrorHelpCommand(String commandName) {
+        ICommand command = commands.get(commandName);
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
+        eb.setTitle("Error " + commandName);
+        eb.addField("`." + command.getCommandExample() + "`",  command.getShortCommandDescription(), true);
+
+        eb.setColor(getCurrentColor());
+        return eb;
     }
 }

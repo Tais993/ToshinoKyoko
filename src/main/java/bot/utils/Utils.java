@@ -11,7 +11,7 @@ public class Utils {
     private static final Color orange = new Color(219, 65, 5);
 
     public static Color getCurrentColor() {
-        return yellow;
+        return Color.yellow;
     }
 
     public static User getBotAsUser() {

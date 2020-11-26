@@ -117,4 +117,22 @@ public class CommandReceivedEvent {
     public boolean hasArgs() {
         return hasArgs;
     }
+
+    public Member getFirstArgAsMember() {
+        if (message.getMentionedMembers().size() >= 1) {
+            return message.getMentionedMembers().get(0);
+        } else {
+            if (args[0].matches("[0-9]+")) {
+                try {
+                    Member memberInArg = getGuild().retrieveMemberById(args[0]).complete();
+                    if (memberInArg != null) {
+                        return memberInArg;
+                    }
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
 }

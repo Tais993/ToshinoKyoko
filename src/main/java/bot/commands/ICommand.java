@@ -22,7 +22,7 @@ public interface ICommand {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(getCurrentColor());
-        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
+//        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
         eb.setTimestamp(Instant.now());
 
         return eb;
@@ -47,5 +47,18 @@ public interface ICommand {
 
     default MessageEmbed getErrorHelp(String error) {
         return getErrorHelpCommand(getCommand()).setDescription("**" + error + "**").build();
+    }
+
+    default MessageEmbed getIAErrorHelp(String IAFix) {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setAuthor("Toshino Kyoko", "https://discord.gg/fsYrseYbpe", getBotAsUser().getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
+        eb.setTitle("Invalid arguments!");
+        eb.addField("`." + getCommandExample() + "`", IAFix, true);
+
+        eb.setColor(getCurrentColor());
+        return eb.build();
     }
 }

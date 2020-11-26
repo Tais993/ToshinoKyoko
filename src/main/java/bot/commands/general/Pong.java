@@ -3,34 +3,39 @@ package bot.commands.general;
 import bot.commands.CommandReceivedEvent;
 import bot.commands.ICommand;
 
-public class Ping implements ICommand {
-    String command = "ping";
+public class Pong implements ICommand {
+    String command = "pong";
     String category = "general";
-    String commandExample = "ping";
-    String shortCommandDescription = "Get the ping of the bot.";
-    String fullCommandDescription = "Get the ping of the bot.";
+    String commandExample = "pong";
+    String shortCommandDescription = "The fake version of ping.";
+    String fullCommandDescription = "The fake version of ping";
 
     @Override
     public void command(CommandReceivedEvent event) {
-        event.getChannel().sendMessage("Rum Raisin!").queue();
+        event.getChannel().sendMessage("B-baka! " + event.getAuthor().getAsMention() + "-kun, it's `.ping` not `.pong`! :(").queue();
     }
 
+    @Override
     public String getCommand() {
         return command;
     }
 
+    @Override
     public String getCategory() {
         return category;
     }
 
+    @Override
     public String getCommandExample() {
         return commandExample;
     }
 
+    @Override
     public String getShortCommandDescription() {
         return shortCommandDescription;
     }
 
+    @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
     }

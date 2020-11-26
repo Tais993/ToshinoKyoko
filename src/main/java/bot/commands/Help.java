@@ -12,8 +12,8 @@ public class Help implements ICommand {
     @Override
     public void command(CommandReceivedEvent e) {
 
-        if (!e.hasArgs()) {
-            e.getChannel().sendMessage("Bad, no args for you!").queue();
+        if (!e.hasArgs() || e.getArgs()[0].equalsIgnoreCase("all")) {
+            getHelpAllByCategory(e);
             return;
         }
 
@@ -24,7 +24,7 @@ public class Help implements ICommand {
         } else if (isCommand(args[0])) {
             e.getChannel().sendMessage(getFullHelpCommand(args[0]).build()).queue();
         } else {
-            getHelpAllByCategory(e);
+            e.getChannel().sendMessage("Requires a valid category / command").queue();
         }
     }
 
