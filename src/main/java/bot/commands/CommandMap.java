@@ -4,6 +4,7 @@ import bot.commands.anime.Hug;
 import bot.commands.anime.Pat;
 import bot.commands.anime.Wink;
 import bot.commands.general.*;
+import bot.commands.music.Play;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 
@@ -32,7 +33,8 @@ public class CommandMap {
             entry("region", new Regions()),
             entry("hug", new Hug()),
             entry("pat", new Pat()),
-            entry("wink", new Wink())
+            entry("wink", new Wink()),
+            entry("play", new Play())
     ));
 
     static ArrayList<String> categories = new ArrayList<>(List.of("General", "Anime", "Miscellaneous", "Music", "Staff"));

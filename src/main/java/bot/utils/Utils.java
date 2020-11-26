@@ -1,8 +1,11 @@
 package bot.utils;
 
 import net.dv8tion.jda.api.entities.User;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static bot.ToshinoKyoko.getJda;
 
@@ -16,5 +19,14 @@ public class Utils {
 
     public static User getBotAsUser() {
         return getJda().getSelfUser();
+    }
+
+    public static boolean isUrl(String possibleUrl) {
+        try {
+            URL url = new URL(possibleUrl);
+            return true;
+        } catch (MalformedURLException ignore) {
+            return false;
+        }
     }
 }

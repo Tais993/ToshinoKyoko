@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import static bot.music.youtube.SearchYouTube.setYtApiKey;
+
 public class ToshinoKyoko {
     public static JDA jda;
 
@@ -22,6 +24,8 @@ public class ToshinoKyoko {
 
         jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).build().awaitReady();
         jda.addEventListener(new CommandHandler());
+
+        setYtApiKey();
     }
 
     public static JDA getJda() {
